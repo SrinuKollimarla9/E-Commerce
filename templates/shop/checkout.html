@@ -1,0 +1,7 @@
+{% extends 'shop/base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h1>Order placed</h1>
+<p>Thank you! Your order #{{ order.id }} was created. Total: ₹ {{ order.total }}</p>
+<a href="{% url 'shop:index' %}" class="btn btn-primary">Continue Shopping</a>
+{% endblock %}

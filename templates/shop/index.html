@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+{% block title %}Home - My Shop{% endblock %}
+{% block content %}
+<h1>Featured products</h1>
+<div class="row">
+  {% for product in products %}
+  <div class="col-md-3 mb-3">
+    <div class="card h-100">
+      {% if product.image %}
+      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text">₹ {{ product.price }}</p>
+        <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn btn-primary">View</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>No products yet. Add some via admin.</p>
+  {% endfor %}
+</div>
+{% endblock %}
