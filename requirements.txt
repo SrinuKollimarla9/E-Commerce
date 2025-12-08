@@ -3,3 +3,9 @@ mysqlclient>=2.1
 django-crispy-forms
 Pillow
 PyMySQL
+
+# Required for Render
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary
