@@ -1,16 +1,79 @@
-{% extends 'shop/base.html' %}
-{% block title %}Your Orders{% endblock %}
+{% extends "shop/base.html" %}
+{% block title %}Order History{% endblock %}
+
 {% block content %}
-<h1>Your Orders</h1>
-{% if orders %}
-  <ul class="list-group">
-  {% for order in orders %}
-    <li class="list-group-item">
-      Order #{{ order.id }} — ₹ {{ order.total }} — {{ order.get_status_display }} — {{ order.created_at }}
-    </li>
-  {% endfor %}
-  </ul>
-{% else %}
-  <p>You have no orders yet.</p>
-{% endif %}
+
+<div class="max-w-6xl mx-auto px-4 py-10">
+
+    <h1 class="text-4xl font-bold mb-10 text-gray-900">Order History</h1>
+
+    {% for order in orders %}
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition p-6 mb-8">
+
+        <!-- Top Row -->
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-semibold text-gray-900">Order #{{ order.id }}</h2>
+
+            <div class="flex items-center gap-4">
+
+                <!-- Status Badge -->
+                {% if order.status == "Delivered" %}
+                <span class="px-4 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full">
+                    Delivered
+                </span>
+                {% elif order.status == "Shipped" %}
+                <span class="px-4 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full">
+                    Shipped
+                </span>
+                {% elif order.status == "Pending" %}
+                <span class="px-4 py-1 text-sm font-medium bg-yellow-100 text-yellow-700 rounded-full">
+                    Pending
+                </span>
+                {% endif %}
+
+                <!-- Amount -->
+                <p class="text-xl font-bold text-gray-900">₹ {{ order.total_amount }}</p>
+            </div>
+        </div>
+
+        <!-- Order Content -->
+        <div class="mt-6 flex items-center gap-6">
+
+            <!-- Thumbnail -->
+            <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-2xl font-semibold text-gray-600">
+                {% if order.items.first.product.image %}
+                <img src="{{ order.items.first.product.image.url }}" class="w-20 h-20 rounded-lg object-cover">
+                {% else %}
+                {{ order.items.first.product.name|slice:":3" }}
+                {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div>
+                <p class="text-lg font-medium text-gray-900">
+                    {{ order.items.first.product.name }} ({{ order.items.count }} item{% if order.items.count > 1 %}s{% endif %})
+                </p>
+
+                <p class="text-gray-500 text-sm mt-1">
+                    Placed: {{ order.created_at|date:"d M Y, H:i" }}
+                </p>
+
+                <a href="{% url 'shop:order_detail' order.id %}"
+                   class="text-blue-600 text-sm mt-2 inline-flex items-center hover:underline">
+                    ↗ View Order Details
+                </a>
+
+                {% if order.status == "Shipped" %}
+                <a href="#" class="block text-blue-600 text-sm mt-1 hover:underline">
+                    🚚 Track Shipment
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
 {% endblock %}

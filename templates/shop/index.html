@@ -1,23 +1,49 @@
-{% extends 'shop/base.html' %}
-{% block title %}Home - My Shop{% endblock %}
+{% extends "shop/base.html" %}
+{% block title %}Home – My Shop{% endblock %}
+{% load static %}
 {% block content %}
-<h1>Featured products</h1>
-<div class="row">
-  {% for product in products %}
-  <div class="col-md-3 mb-3">
-    <div class="card h-100">
-      {% if product.image %}
-      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-      {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
-        <p class="card-text">₹ {{ product.price }}</p>
-        <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn btn-primary">View</a>
-      </div>
+
+<!-- HERO SECTION -->
+<section class="relative h-[420px] mb-12">
+    <img src="{% static 'images/hero.jpg' %}"
+         class="absolute inset-0 w-full h-full object-cover"
+         alt="Art Gallery">
+
+    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <div class="text-center text-white px-4">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                Take a tour in our online art gallery
+            </h1>
+            <a href="{% url 'shop:product_list' %}"
+               class="bg-white text-black px-6 py-3 rounded hover:bg-gray-200">
+                View Artwork
+            </a>
+        </div>
     </div>
-  </div>
-  {% empty %}
-  <p>No products yet. Add some via admin.</p>
-  {% endfor %}
-</div>
+</section>
+
+<!-- PRODUCTS BY CATEGORY -->
+{% for category in categories %}
+<section class="mb-14">
+    <h2 class="text-2xl font-semibold text-center mb-6">
+        {{ category.name }}
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {% for product in products %}
+            {% if product.category == category %}
+                {% include "shop/product_card.html" %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-6">
+        <a href="{% url 'shop:product_list' %}"
+           class="text-indigo-600 hover:underline">
+            View All Products
+        </a>
+    </div>
+</section>
+{% endfor %}
+
 {% endblock %}

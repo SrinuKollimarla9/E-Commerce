@@ -10,6 +10,11 @@ urlpatterns = [
     path('cart/', views.cart_view, name='cart'),
     path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('checkout/', views.checkout, name='checkout'),
-    path('signup/', views.signup_view, name='signup'),
     path('orders/', views.order_history, name='order_history'),
+    path("orders/<int:order_id>/", views.order_detail, name="order_detail"),
+
+    # AUTH URLS (MUST BE PRESENT)
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 ]

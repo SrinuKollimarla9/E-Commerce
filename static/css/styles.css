@@ -111,6 +111,11 @@ h1, h2, h3 {
     margin: 40px auto;
     padding: 0 20px;
 }
+/* Optional small tweaks */
+img {
+    max-width: 100%;
+    display: block;
+}
 
 /* --- Footer --- */
 footer {

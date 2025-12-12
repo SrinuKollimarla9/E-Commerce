@@ -1,0 +1,45 @@
+<nav class="navbar bg-base-100 shadow-md px-6">
+  <div class="flex-1">
+    <a href="/" class="text-xl font-bold flex items-center gap-2">
+      🎨 Art Gallery
+    </a>
+  </div>
+
+  <div class="flex-none hidden md:flex gap-4">
+    <a href="{% url 'shop:product_list' %}" class="btn btn-ghost">Products</a>
+    <a href="{% url 'shop:cart' %}" class="btn btn-ghost">Cart</a>
+    <a href="{% url 'shop:order_history' %}" class="btn btn-ghost">Orders</a>
+
+    {% if request.user.is_authenticated %}
+      <span class="text-gray-600">Hi, {{ request.user.username }}</span>
+      <a href="{% url 'shop:logout' %}" class="btn btn-error btn-sm">Logout</a>
+    {% else %}
+      <a href="{% url 'shop:login' %}" class="btn btn-primary btn-sm">Login</a>
+      <a href="{% url 'shop:signup' %}" class="btn btn-secondary btn-sm">Sign Up</a>
+    {% endif %}
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="dropdown dropdown-end md:hidden">
+    <label tabindex="0" class="btn btn-ghost">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </label>
+    <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52">
+      <li><a href="{% url 'shop:product_list' %}">Products</a></li>
+      <li><a href="{% url 'shop:cart' %}">Cart</a></li>
+      <li><a href="{% url 'shop:order_history' %}">Orders</a></li>
+
+      {% if request.user.is_authenticated %}
+        <li class="text-gray-600">Hi, {{ request.user.username }}</li>
+        <li><a href="{% url 'shop:logout' %}" class="text-red-500">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'shop:login' %}">Login</a></li>
+        <li><a href="{% url 'shop:signup' %}">Sign Up</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

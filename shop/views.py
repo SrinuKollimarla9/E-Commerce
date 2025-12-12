@@ -1,66 +1,115 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import login
-from .models import Product, CartItem, Order, OrderItem
-from .forms import SignUpForm
-from django.contrib.auth.decorators import login_required
-from django.db import transaction
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect
+from .models import Category, Product, CartItem, Order, OrderItem
+from .forms import StyledUserCreationForm
+
+
 
 def index(request):
-    products = Product.objects.all()[:12]
-    return render(request, 'shop/index.html', {'products': products})
+    categories = Category.objects.all()
+    products = Product.objects.select_related('category').all()
+    return render(request, 'shop/index.html', {
+        'categories': categories,
+        'products': products,
+    })
+
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'shop/product_list.html', {'products': products})
+    return render(request, 'shop/product_list.html', {
+        'products': products
+    })
+
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    return render(request, 'shop/product_detail.html', {'product': product})
+    return render(request, 'shop/product_detail.html', {
+        'product': product
+    })
 
-@login_required
+
+def cart_view(request):
+    cart = request.session.get('cart', [])
+    products = Product.objects.filter(id__in=cart)
+
+    return render(request, 'shop/cart.html', {
+        'cart_items': products
+    })
+
+
+
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    item, created = CartItem.objects.get_or_create(user=request.user, product=product)
-    if not created:
-        item.quantity += 1
-        item.save()
+    cart = request.session.get('cart', [])
+
+    if product_id not in cart:
+        cart.append(product_id)
+
+    request.session['cart'] = cart
     return redirect('shop:cart')
 
-@login_required
-def cart_view(request):
-    items = CartItem.objects.filter(user=request.user)
-    total = sum([it.subtotal() for it in items]) if items.exists() else 0
-    return render(request, 'shop/cart.html', {'items': items, 'total': total})
 
-@login_required
-@transaction.atomic
+
 def checkout(request):
-    items = CartItem.objects.filter(user=request.user)
-    if not items.exists():
-        return redirect('shop:cart')
-    total = sum([it.subtotal() for it in items])
-    order = Order.objects.create(user=request.user, total=total)
-    for it in items:
-        OrderItem.objects.create(order=order, product=it.product, quantity=it.quantity, price=it.product.price)
-        # reduce stock
-        it.product.stock = max(it.product.stock - it.quantity, 0)
-        it.product.save()
-    # clear cart
-    items.delete()
-    return render(request, 'shop/checkout.html', {'order': order})
+    cart = request.session.get('cart', [])
+    products = Product.objects.filter(id__in=cart)
+
+    total = sum(product.price for product in products)
+
+    if request.method == 'POST' and products.exists():
+        order = Order.objects.create(total_amount=total)
+
+        for product in products:
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                price=product.price
+            )
+
+        request.session['cart'] = []  # clear cart
+        return redirect('shop:order_history')
+
+    return render(request, 'shop/checkout.html', {
+        'products': products,
+        'total': total
+    })
+
+
+def order_history(request):
+    orders = Order.objects.prefetch_related('items').order_by('-created_at')
+    return render(request, 'shop/order_history.html', {
+        'orders': orders
+    })
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, "shop/order_detail.html", {"order": order})
+
+
 
 def signup_view(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = StyledUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('shop:index')
     else:
-        form = SignUpForm()
+        form = StyledUserCreationForm()
+
     return render(request, 'shop/signup.html', {'form': form})
 
-@login_required
-def order_history(request):
-    orders = request.user.orders.all()
-    return render(request, 'shop/order_history.html', {'orders': orders})
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('shop:index')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'shop/login.html', {"form": form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('shop:index')

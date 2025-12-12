@@ -1,23 +1,14 @@
-{% extends 'shop/base.html' %}
-{% block title %}Products - My Shop{% endblock %}
+{% extends "shop/base.html" %}
+{% block title %}Products{% endblock %}
+
 {% block content %}
-<h1>All Products</h1>
-<div class="row">
-  {% for product in products %}
-  <div class="col-md-3 mb-3">
-    <div class="card h-100">
-      {% if product.image %}
-      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-      {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
-        <p class="card-text">₹ {{ product.price }}</p>
-        <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn btn-primary">View</a>
-      </div>
-    </div>
-  </div>
-  {% empty %}
-  <p>No products available.</p>
-  {% endfor %}
+<h1 class="text-2xl font-semibold mb-6">All Artworks</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    {% for product in products %}
+        {% include "shop/product_card.html" %}
+    {% empty %}
+        <p>No products available.</p>
+    {% endfor %}
 </div>
 {% endblock %}

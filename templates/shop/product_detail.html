@@ -1,20 +1,19 @@
-{% extends 'shop/base.html' %}
-{% block title %}{{ product.name }} - My Shop{% endblock %}
+{% extends "shop/base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
 {% block content %}
-<div class="row">
-  <div class="col-md-6">
-    {% if product.image %}
-    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
-    {% endif %}
-  </div>
-  <div class="col-md-6">
-    <h2>{{ product.name }}</h2>
-    <p>Price: ₹ {{ product.price }}</p>
-    <p>{{ product.description }}</p>
-    <form method="post" action="{% url 'shop:add_to_cart' product_id=product.id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-success">Add to cart</button>
-    </form>
-  </div>
+<div class="grid md:grid-cols-2 gap-10">
+    <img src="{{ product.image.url }}"
+         class="w-full h-[450px] object-cover rounded">
+
+    <div>
+        <h1 class="text-3xl font-semibold mb-4">{{ product.name }}</h1>
+        <p class="text-gray-600 mb-4">₹ {{ product.price }}</p>
+
+        <a href="{% url 'shop:add_to_cart' product.id %}"
+           class="bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700">
+            Add to Cart
+        </a>
+    </div>
 </div>
 {% endblock %}

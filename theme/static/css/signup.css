@@ -1,0 +1,68 @@
+/* Background */
+.signup-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+/* White card */
+.signup-box {
+    background: #ffffff;
+    padding: 40px;
+    width: 550px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+.signup-box h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+/* Labels */
+.signup-box label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Input boxes exactly like your screenshot */
+.signup-box input {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #dadada;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+}
+
+/* Focus effect */
+.signup-box input:focus {
+    border-color: #5770f8;
+    box-shadow: 0 0 0 2px rgba(87, 112, 248, 0.25);
+    outline: none;
+}
+
+/* Submit button */
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    background: #1f2937;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.signup-btn:hover {
+    background: #111827;
+}
