@@ -77,7 +77,9 @@ USE_TZ = True
 # Vercel-safe static configuration
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
 
 # ================= MEDIA =================
 # Disabled (Vercel does not support persistent media storage)
