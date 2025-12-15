@@ -1,120 +1,89 @@
 import os
 from pathlib import Path
 
-# ---------------- BASE ----------------
+# ================= BASE =================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-9x!3@#fKp9^devonly'  # change for production
-DEBUG = False  # True for local development
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = "django-insecure-dev-key"  # acceptable for demo / academic use
+DEBUG = False
 
-# ---------------- INSTALLED APPS ----------------
+ALLOWED_HOSTS = ["*"]
+
+# ================= INSTALLED APPS =================
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
-    'tailwind',
-    'theme',
-    'django_browser_reload',
+    # third-party
+    "crispy_forms",
 
-    'crispy_forms',
-
-    'shop',
+    # local
+    "shop",
 ]
 
-TAILWIND_APP_NAME = 'theme'
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
-
-# ---------------- MIDDLEWARE ----------------
+# ================= MIDDLEWARE =================
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
-
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# ================= URL & WSGI =================
+ROOT_URLCONF = "ecommerce_site.urls"
+WSGI_APPLICATION = "ecommerce_site.wsgi.application"
 
-# ---------------- URL & WSGI ----------------
-ROOT_URLCONF = 'ecommerce_site.urls'
-WSGI_APPLICATION = 'ecommerce_site.wsgi.application'
-
-# ---------------- DATABASE ----------------
-# Local development: use SQLite (no MySQL/PostgreSQL needed)
+# ================= DATABASE =================
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
-# For production with MySQL/PostgreSQL, uncomment and configure:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  # or 'django.db.backends.postgresql'
-#         'NAME': 'ecommerce_db',
-#         'USER': 'root',
-#         'PASSWORD': 'Srinu@123',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
-
-# ---------------- TEMPLATES ----------------
+# ================= TEMPLATES =================
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # global templates folder
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-# ---------------- PASSWORD VALIDATION ----------------
+# ================= PASSWORD VALIDATION =================
 AUTH_PASSWORD_VALIDATORS = []
 
-# ---------------- INTERNATIONALIZATION ----------------
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'
+# ================= INTERNATIONALIZATION =================
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# ---------------- STATIC & MEDIA ----------------
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# ================= STATIC FILES =================
+# Vercel-safe static configuration
+STATIC_URL = "/static/"
+STATIC_ROOT = None
+STATICFILES_DIRS = []
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# ================= MEDIA =================
+# Disabled (Vercel does not support persistent media storage)
 
-# ---------------- OTHER ----------------
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# ================= DEFAULT PK =================
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Crispy forms
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = 'artistryhub511@gmail.com'
-EMAIL_HOST_PASSWORD = 'iunz ohfs cnzw ayko'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# ================= CRISPY FORMS =================
+CRISPY_TEMPLATE_PACK = "bootstrap4"

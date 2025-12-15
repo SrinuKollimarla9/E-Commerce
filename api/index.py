@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 from django.core.wsgi import get_wsgi_application
 
@@ -8,3 +9,6 @@ os.environ.setdefault(
 
 application = get_wsgi_application()
 app = application
+=======
+
+>>>>>>> c96ac8f73fa5f681dd3e7840b9089ce00ba98bb7
