@@ -76,7 +76,7 @@ USE_TZ = True
 # ================= STATIC FILES =================
 # Vercel-safe static configuration
 STATIC_URL = "/static/"
-STATIC_ROOT = None
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = []
 
 # ================= MEDIA =================
