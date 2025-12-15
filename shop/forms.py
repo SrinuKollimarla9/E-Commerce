@@ -10,15 +10,17 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
 class StyledUserCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = User
-        fields = ("username", "password1", "password2")
+        fields = ('username', 'email', 'password1', 'password2')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            field.widget.attrs.update({
-                "class": "input input-bordered w-full",
-                "placeholder": field.label
-            })
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return email

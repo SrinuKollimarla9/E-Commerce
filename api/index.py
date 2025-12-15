@@ -2,8 +2,8 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault(
-    'DJANGO_SETTINGS_MODULE',
-    'ecommerce_site.settings'
+    "DJANGO_SETTINGS_MODULE",
+    "ecommerce_site.settings"
 )
 
 application = get_wsgi_application()

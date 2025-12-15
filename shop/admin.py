@@ -1,5 +1,11 @@
 from django.contrib import admin
 from .models import Product, Category, Order, OrderItem
+from .models import HeroSection
+
+@admin.register(HeroSection)
+class HeroSectionAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_active")
+    list_filter = ("is_active",)
 
 
 @admin.register(Category)
@@ -23,7 +29,5 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'total_amount', 'status', 'created_at')
-    list_filter = ('status', 'created_at')
-    readonly_fields = ('total_amount', 'created_at')
-    inlines = [OrderItemInline]
+    list_display = ("id", "user", "total_price", "created_at")
+    readonly_fields = ("total_price", "created_at")

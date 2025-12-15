@@ -4,9 +4,9 @@ from pathlib import Path
 # ---------------- BASE ----------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'changeme-for-dev'  # change for production
-DEBUG = True  # True for local development
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+SECRET_KEY = 'django-insecure-9x!3@#fKp9^devonly'  # change for production
+DEBUG = False  # True for local development
+ALLOWED_HOSTS = ['*']
 
 # ---------------- INSTALLED APPS ----------------
 INSTALLED_APPS = [
@@ -40,6 +40,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -97,7 +98,7 @@ USE_TZ = True
 
 # ---------------- STATIC & MEDIA ----------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
@@ -108,3 +109,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'artistryhub511@gmail.com'
+EMAIL_HOST_PASSWORD = 'iunz ohfs cnzw ayko'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

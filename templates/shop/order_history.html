@@ -1,79 +1,171 @@
 {% extends "shop/base.html" %}
-{% block title %}Order History{% endblock %}
+{% block title %}Order History | Art Gallery{% endblock %}
 
 {% block content %}
 
-<div class="max-w-6xl mx-auto px-4 py-10">
+<style>
+/* Page */
+.order-page {
+    min-height: calc(100vh - 70px);
+    background: #f5f6f8;
+    padding: 40px 20px;
+}
 
-    <h1 class="text-4xl font-bold mb-10 text-gray-900">Order History</h1>
+/* Container */
+.order-container {
+    max-width: 1100px;
+    margin: auto;
+}
 
-    {% for order in orders %}
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition p-6 mb-8">
+/* Title */
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #0f172a;
+}
 
-        <!-- Top Row -->
-        <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-semibold text-gray-900">Order #{{ order.id }}</h2>
+/* Order Card */
+.order-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    color: #111; /* ✅ TEXT FIX */
+}
 
-            <div class="flex items-center gap-4">
+/* Left Section */
+.order-left {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
 
-                <!-- Status Badge -->
-                {% if order.status == "Delivered" %}
-                <span class="px-4 py-1 text-sm font-medium bg-green-100 text-green-700 rounded-full">
-                    Delivered
-                </span>
-                {% elif order.status == "Shipped" %}
-                <span class="px-4 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full">
-                    Shipped
-                </span>
-                {% elif order.status == "Pending" %}
-                <span class="px-4 py-1 text-sm font-medium bg-yellow-100 text-yellow-700 rounded-full">
-                    Pending
-                </span>
-                {% endif %}
+/* Image */
+.order-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+}
 
-                <!-- Amount -->
-                <p class="text-xl font-bold text-gray-900">₹ {{ order.total_amount }}</p>
+/* Order Info */
+.order-info h4 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+}
+
+.order-meta {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+/* Status Badge */
+.status {
+    display: inline-block;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+/* Right Section */
+.order-right {
+    text-align: right;
+}
+
+.order-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+/* Link */
+.order-right a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.order-right a:hover {
+    text-decoration: underline;
+}
+
+/* Empty */
+.empty-orders {
+    text-align: center;
+    font-size: 20px;
+    padding: 80px 0;
+    color: #111;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .order-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-right {
+        width: 100%;
+        text-align: left;
+    }
+}
+</style>
+
+<div class="order-page">
+    <div class="order-container">
+
+        <div class="page-title">Order History</div>
+
+        {% if orders %}
+            {% for order in orders %}
+            <div class="order-card">
+
+                <div class="order-left">
+                    {% if order.items.first %}
+                        <img src="{{ order.items.first.product.image.url }}"
+                             class="order-img"
+                             alt="{{ order.items.first.product.name }}">
+                    {% endif %}
+
+                    <div class="order-info">
+                        <h4>Order #{{ order.id }}</h4>
+                        <div class="order-meta">
+                            {{ order.items.count }} item{{ order.items.count|pluralize }} •
+                            Placed on {{ order.created_at|date:"d M Y, H:i" }}
+                        </div>
+                        <span class="status">Placed</span>
+                    </div>
+                </div>
+
+                <div class="order-right">
+                    <div class="order-total">₹ {{ order.total_price }}</div>
+                    <a href="{% url 'shop:order_detail' order.id %}">
+                        View Details →
+                    </a>
+                </div>
+
             </div>
-        </div>
-
-        <!-- Order Content -->
-        <div class="mt-6 flex items-center gap-6">
-
-            <!-- Thumbnail -->
-            <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-2xl font-semibold text-gray-600">
-                {% if order.items.first.product.image %}
-                <img src="{{ order.items.first.product.image.url }}" class="w-20 h-20 rounded-lg object-cover">
-                {% else %}
-                {{ order.items.first.product.name|slice:":3" }}
-                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="empty-orders">
+                You have not placed any orders yet.
             </div>
-
-            <!-- Info -->
-            <div>
-                <p class="text-lg font-medium text-gray-900">
-                    {{ order.items.first.product.name }} ({{ order.items.count }} item{% if order.items.count > 1 %}s{% endif %})
-                </p>
-
-                <p class="text-gray-500 text-sm mt-1">
-                    Placed: {{ order.created_at|date:"d M Y, H:i" }}
-                </p>
-
-                <a href="{% url 'shop:order_detail' order.id %}"
-                   class="text-blue-600 text-sm mt-2 inline-flex items-center hover:underline">
-                    ↗ View Order Details
-                </a>
-
-                {% if order.status == "Shipped" %}
-                <a href="#" class="block text-blue-600 text-sm mt-1 hover:underline">
-                    🚚 Track Shipment
-                </a>
-                {% endif %}
-            </div>
-        </div>
+        {% endif %}
 
     </div>
-    {% endfor %}
-
 </div>
 
 {% endblock %}

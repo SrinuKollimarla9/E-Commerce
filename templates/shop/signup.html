@@ -1,200 +1,244 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Art Gallery – Create Account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Gallery - Sign Up</title>
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === base style (same as login page for consistency) === */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
-        body {
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden; position: relative;
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        .bg-shapes { position: absolute; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
-        .shape { position: absolute; opacity: 0.12; animation: float 22s infinite ease-in-out; }
-        .shape-1 { width: 300px; height: 300px; background: linear-gradient(45deg,#ff6b6b,#feca57);
-            border-radius: 30% 70% 70% 30%; top: -150px; right: -150px; }
-        .shape-2 { width: 220px; height: 220px; background: linear-gradient(45deg,#48dbfb,#0abde3);
-            border-radius: 50%; bottom: -120px; left: -120px; }
-        .shape-3 { width: 260px; height: 260px; background: linear-gradient(45deg,#f368e0,#ee5a24);
-            border-radius: 40% 60% 60% 40%; top: 55%; left: 10%; }
-
-        @keyframes float {
-            0%,100% { transform: translate(0,0) rotate(0); }
-            25% { transform: translate(35px,-25px) rotate(90deg); }
-            50% { transform: translate(-25px,25px) rotate(180deg); }
-            75% { transform: translate(30px,10px) rotate(270deg); }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .signup-wrapper {
-            position: relative; z-index: 1; width: 100%; max-width: 480px; padding: 20px;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
         }
 
-        .signup-container {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.7s ease-out;
+        .signup-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 18px;
+            padding: 45px 40px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .brand-section { text-align: center; margin-bottom: 35px; }
+        .brand {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
         .brand-logo {
-            width: 80px; height: 80px; border-radius: 20px;
-            background: linear-gradient(135deg,#667eea,#764ba2);
-            display: flex; justify-content: center; align-items: center;
-            margin: 0 auto 20px; box-shadow: 0 10px 25px rgba(102,126,234,0.35);
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 34px;
         }
-        .brand-logo i { font-size: 36px; color: white; }
 
-        .brand-title {
-            font-size: 28px; font-weight: 700;
-            background: linear-gradient(135deg,#667eea,#764ba2);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .brand h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .brand-subtitle { color: #718096; margin-top: 5px; }
-
-        .error-message {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 18px;
+        .brand p {
             font-size: 14px;
+            color: #6b7280;
         }
 
-        .form-group { margin-bottom: 25px; position: relative; }
-        .input-wrapper { position: relative; }
-        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
-
-        input {
-            width: 100%; padding: 14px 45px; border: 2px solid #e2e8f0;
-            border-radius: 14px; background: #f7fafc; font-size: 15px;
-            transition: all 0.3s;
+        .form-group {
+            margin-bottom: 22px;
         }
 
-        input:focus {
-            outline: none; border-color: #667eea; background: white;
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
             box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
         }
 
-        .password-toggle {
-            position: absolute; right: 15px; top: 50%;
-            transform: translateY(-50%); cursor: pointer; color: #a0aec0;
+        .errorlist {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            list-style: none;
         }
 
-        .signup-submit {
-            width: 100%; padding: 14px; margin-top: 10px;
-            border-radius: 12px; border: none;
-            background: linear-gradient(135deg,#667eea,#764ba2);
-            color: white; font-size: 17px; font-weight: 600; cursor: pointer;
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .signup-submit:hover { opacity: 0.9; }
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(102,126,234,0.45);
+        }
 
-        .login-link { text-align: center; margin-top: 18px; color: #718096; }
-        .login-link a { color: #667eea; font-weight: 600; }
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
 
-        @media(max-width: 480px){
-            .signup-container{ padding: 40px 25px; }
+        .login-link a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .signup-card {
+                padding: 35px 25px;
+            }
         }
     </style>
 </head>
-
 <body>
 
-<!-- Animated Background -->
-<div class="bg-shapes">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-</div>
-
-<!-- Signup Form Container -->
 <div class="signup-wrapper">
-    <div class="signup-container">
+    <div class="signup-card">
 
-        <!-- Brand -->
-        <div class="brand-section">
-            <div class="brand-logo"><i class="fas fa-user-plus"></i></div>
-            <h1 class="brand-title">Create Account</h1>
-            <p class="brand-subtitle">Join the Art Gallery community</p>
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fas fa-palette"></i>
+            </div>
+            <h1>Create Account</h1>
+            <p>Join Art Gallery and explore creativity</p>
         </div>
 
-        <!-- Django Errors -->
-        {% if form.errors %}
-            <div class="error-message">
-                Please fix the errors below and try again.
-            </div>
+        {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {{ form.non_field_errors }}
+            </ul>
         {% endif %}
 
-        <!-- SIGNUP FORM -->
         <form method="post">
             {% csrf_token %}
 
-            <!-- Username -->
             <div class="form-group">
                 <label>Username</label>
-                <div class="input-wrapper">
-                    {{ form.username }}
+                <div class="input-wrap">
                     <i class="fas fa-user"></i>
+                    {{ form.username }}
                 </div>
+                {{ form.username.errors }}
             </div>
 
-            <!-- Password -->
+            <!-- ✅ EMAIL FIELD ADDED -->
+            <div class="form-group">
+                <label>Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    {{ form.email }}
+                </div>
+                {{ form.email.errors }}
+            </div>
+
             <div class="form-group">
                 <label>Password</label>
-                <div class="input-wrapper">
-                    {{ form.password1 }}
+                <div class="input-wrap">
                     <i class="fas fa-lock"></i>
-                    <i class="fas fa-eye password-toggle" onclick="togglePwd('id_password1')"></i>
+                    {{ form.password1 }}
                 </div>
+                {{ form.password1.errors }}
             </div>
 
-            <!-- Confirm Password -->
             <div class="form-group">
                 <label>Confirm Password</label>
-                <div class="input-wrapper">
-                    {{ form.password2 }}
+                <div class="input-wrap">
                     <i class="fas fa-lock"></i>
-                    <i class="fas fa-eye password-toggle" onclick="togglePwd('id_password2')"></i>
+                    {{ form.password2 }}
                 </div>
+                {{ form.password2.errors }}
             </div>
 
-            <button class="signup-submit" type="submit">Create Account</button>
+            <button type="submit" class="signup-btn">
+                Create Account
+            </button>
         </form>
 
         <div class="login-link">
-            Already have an account? <a href="{% url 'shop:login' %}">Login</a>
+            Already have an account?
+            <a href="{% url 'shop:login' %}">Login</a>
         </div>
 
     </div>
 </div>
-
-<script>
-    // Toggle password visibility for two fields
-    function togglePwd(fieldId) {
-        const input = document.getElementById(fieldId);
-        if (input.type === "password") {
-            input.type = "text";
-        } else {
-            input.type = "password";
-        }
-    }
-</script>
 
 </body>
 </html>

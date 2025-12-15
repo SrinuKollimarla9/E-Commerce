@@ -1,24 +1,129 @@
 {% extends "shop/base.html" %}
-{% block title %}Cart{% endblock %}
+{% block title %}Cart | Art Gallery{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl font-semibold mb-6">Your Cart</h1>
 
-{% for product in cart_items %}
-<div class="bg-white p-4 rounded shadow mb-4 flex items-center justify-between">
-    <div class="flex items-center space-x-4">
-        <img src="{{ product.image.url }}"
-             class="w-20 h-20 object-cover rounded">
-        <span class="font-medium">{{ product.name }}</span>
+<style>
+.cart-page {
+    min-height: calc(100vh - 70px);
+    background-color: #f5f6f8;
+    padding: 40px 20px;
+}
+
+.cart-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.cart-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    color: #111;
+}
+
+.cart-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-table th {
+    background: #f1f5f9;
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.cart-table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-summary {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.checkout-btn {
+    background-color: #dc2626;
+    color: #ffffff;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.checkout-btn:hover {
+    background-color: #b91c1c;
+}
+
+.empty-cart {
+    text-align: center;
+    font-size: 20px;
+    padding: 60px 0;
+}
+</style>
+
+<div class="cart-page">
+    <div class="cart-container">
+        <div class="cart-card">
+
+            <div class="cart-title">Your Cart</div>
+
+            {% if cart_items %}
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Artwork</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>₹ {{ item.product.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹ {{ item.subtotal }}</td>  <!-- ✅ FIXED -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="cart-summary">
+                    <strong>Total: ₹ {{ total }}</strong>  <!-- ✅ FIXED -->
+
+                    <form method="post" action="{% url 'shop:place_order' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="checkout-btn">
+                            Place Order
+                        </button>
+                    </form>
+                </div>
+
+            {% else %}
+                <div class="empty-cart">
+                    Your cart is empty.
+                </div>
+            {% endif %}
+
+        </div>
     </div>
-    <span class="font-semibold">₹ {{ product.price }}</span>
 </div>
-{% empty %}
-<p>Your cart is empty.</p>
-{% endfor %}
 
-<a href="{% url 'shop:checkout' %}"
-   class="inline-block mt-6 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700">
-    Checkout
-</a>
 {% endblock %}

@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+        }
+
+        .order-item-card {
+            transition: background-color 0.15s;
+        }
+
+        .order-item-card:hover {
+            background-color: #f8f9fa;
+        }
+
+        .footer-link {
+            color: #1f2937;
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        .footer-link:hover {
+            color: #2563eb;
+        }
+
+        .sidebar {
+            background-color: #f7f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- ================= NAVBAR ================= -->
+<header class="bg-gray-800 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
+        <a href="{% url 'shop:index' %}" class="text-xl font-bold">🎨 Art Gallery</a>
+
+        <nav class="flex space-x-6 items-center">
+            <a href="{% url 'shop:product_list' %}" class="hover:text-gray-300">Products</a>
+            <a href="{% url 'shop:cart' %}" class="hover:text-gray-300">Cart</a>
+            <a href="{% url 'shop:order_history' %}" class="text-yellow-400 font-semibold">Orders</a>
+
+            {% if request.user.is_authenticated %}
+                <span class="text-sm">Hi, {{ request.user.username }}</span>
+                <a href="{% url 'shop:logout' %}"
+                   class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
+                    Logout
+                </a>
+            {% else %}
+                <a href="{% url 'shop:login' %}" class="hover:text-gray-300">Login</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="max-w-7xl mx-auto p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- LEFT COLUMN -->
+    <div class="lg:col-span-2">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-4">
+            THANK YOU FOR YOUR ORDER
+        </h1>
+
+        <p class="text-gray-600 mb-8">
+            Your order has been placed successfully.
+        </p>
+
+        <!-- ORDER SUMMARY -->
+        <div class="space-y-3 mb-8 text-lg">
+            <div class="flex">
+                <span class="w-44 font-semibold">Order Total:</span>
+                <span class="font-bold">₹ {{ order.total_amount }}</span>
+            </div>
+
+            <div class="flex">
+                <span class="w-44 font-semibold">Order ID:</span>
+                <span class="text-gray-600">#{{ order.id }}</span>
+            </div>
+
+            <div class="flex">
+                <span class="w-44 font-semibold">Status:</span>
+                <span class="px-3 py-1 text-sm font-semibold bg-green-100 text-green-700 rounded-full">
+                    {{ order.status|default:"Placed" }}
+                </span>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold border-b pb-2 mb-4">
+            {{ order.items.count }} Item{{ order.items.count|pluralize }}
+        </h2>
+
+        <!-- ORDER ITEMS -->
+        {% for item in order.items.all %}
+        <div class="order-item-card flex items-start space-x-4 p-4 border-b">
+            {% if item.product.image %}
+                <img src="{{ item.product.image.url }}"
+                     class="w-20 h-24 object-cover rounded border"
+                     alt="{{ item.product.name }}">
+            {% else %}
+                <div class="w-20 h-24 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                    No Image
+                </div>
+            {% endif %}
+
+            <div class="flex justify-between w-full">
+                <div>
+                    <p class="text-lg font-bold">₹ {{ item.price }}</p>
+                    <p class="font-medium">{{ item.product.name }}</p>
+                    <p class="text-sm text-gray-500">Quantity: 1</p>
+                </div>
+                <span class="font-semibold">×1</span>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-gray-500 mt-4">No items found in this order.</p>
+        {% endfor %}
+
+        <!-- LINKS -->
+        <div class="mt-8 border-t pt-6 space-y-3">
+            <a href="{% url 'shop:order_history' %}" class="footer-link">My Account</a>
+            <a href="#" class="footer-link">Returns Policy</a>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-8 border-t pt-4">
+            ♻️ All packaging materials are recyclable.
+        </p>
+
+        <a href="{% url 'shop:product_list' %}">
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 mt-8 uppercase tracking-widest">
+                Continue Shopping
+            </button>
+        </a>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="lg:col-span-1">
+        <div class="sidebar shadow-md">
+            <h3 class="text-xl font-bold mb-4">Feedback</h3>
+            <p class="text-sm text-gray-600 mb-6">
+                Help us improve by sharing your experience.
+            </p>
+            <button class="w-full border py-3 font-semibold hover:bg-gray-100">
+                Take Survey
